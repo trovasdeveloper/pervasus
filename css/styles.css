@@ -1,0 +1,303 @@
+/* ===============================================
+   PERVASUS SYSTEM STYLES (Minimalist Hacker UI)
+   =============================================== */
+
+/* --- FONTES E CORES GLOBAIS --- */
+:root {
+    /* Paleta do Sistema Pervasus */
+    --color-bg-black: #050505;
+    --color-text-main: #e0e0e0;
+    --color-accent-green: #00ff41;
+    /* Hacker Green */
+    --color-accent-red: #ff3333;
+    /* Error Red */
+    --color-accent-gold: #ffd700;
+    /* Success Gold */
+    --color-ui-gray: #333333;
+
+    /* Fontes (Definidas no HTML via Google Fonts) */
+    --font-main: 'Share Tech Mono', monospace;
+    --font-body: 'Courier Prime', monospace;
+}
+
+body {
+    font-family: var(--font-main);
+    background-color: var(--color-bg-black);
+    color: var(--color-text-main);
+    margin: 0;
+    padding: 0;
+    height: 100vh;
+    overflow: hidden;
+    /* Impede scroll da página inteira */
+}
+
+/* Utilitários de Visibilidade */
+.hidden {
+    display: none !important;
+}
+
+.active {
+    display: flex !important;
+}
+
+/* ===============================================
+   1. ECRÃ INICIAL (MAIN MENU)
+   =============================================== */
+
+.main-menu-container {
+    position: absolute;
+    top: 0;
+    left: 0;
+    width: 100%;
+    height: 100%;
+
+    /* Fundo simples e escuro */
+    background-color: var(--color-bg-black);
+    background-image: radial-gradient(circle at center, #1a1a1a 0%, #000000 100%);
+
+    display: flex;
+    flex-direction: column;
+    justify-content: center;
+    align-items: center;
+    z-index: 1000;
+}
+
+.game-title {
+    font-family: var(--font-main);
+    color: var(--color-text-main);
+    letter-spacing: 8px;
+    text-transform: uppercase;
+    text-shadow: 0 0 15px rgba(255, 255, 255, 0.2);
+}
+
+.menu-button {
+    font-family: var(--font-main);
+    text-transform: uppercase;
+    letter-spacing: 2px;
+    transition: all 0.3s ease;
+}
+
+.menu-button:hover {
+    background-color: var(--color-text-main);
+    color: var(--color-bg-black);
+    box-shadow: 0 0 15px rgba(255, 255, 255, 0.5);
+}
+
+/* ===============================================
+   2. ÁREA DE JOGO (INTERFACE)
+   =============================================== */
+
+.game-overlay {
+    position: relative;
+    width: 100%;
+    height: 100%;
+    z-index: 10;
+}
+
+/* LAYER DE FUNDO (Híbrido Imagem/Vídeo) */
+.background-container {
+    position: fixed;
+    top: 0;
+    left: 0;
+    width: 100%;
+    height: 100%;
+    z-index: -1;
+    background-color: black;
+}
+
+.scene-bg {
+    position: absolute;
+    top: 50%;
+    left: 50%;
+    transform: translate(-50%, -50%);
+    min-width: 100%;
+    min-height: 100%;
+    width: auto;
+    height: auto;
+    object-fit: cover;
+    opacity: 0;
+    transition: opacity 0.5s ease;
+}
+
+.scene-bg.active {
+    opacity: 0.6;
+}
+
+/* Opacidade reduzida para ler texto melhor */
+
+/* HEADER DO SISTEMA */
+.game-header {
+    background-color: rgba(0, 0, 0, 0.8);
+    backdrop-filter: blur(5px);
+    border-bottom: 1px solid var(--color-ui-gray);
+}
+
+/* CAIXA DE TEXTO (TERMINAL) */
+.narrative-box {
+    background-color: rgba(0, 0, 0, 0.85);
+    border: 1px solid var(--color-ui-gray);
+    box-shadow: 0 0 20px rgba(0, 0, 0, 0.5);
+    min-height: 200px;
+}
+
+.narrative-text {
+    font-family: var(--font-body);
+    font-size: 1.1em;
+    line-height: 1.6;
+    color: #cccccc;
+}
+
+.narrative-text p {
+    margin-bottom: 1em;
+}
+
+/* ===============================================
+   3. ELEMENTOS DE INTERAÇÃO
+   =============================================== */
+
+/* Botões de Controlo (Continuar) */
+.control-button {
+    background: transparent;
+    border: 1px solid var(--color-text-main);
+    color: var(--color-text-main);
+    padding: 10px 30px;
+    font-family: var(--font-main);
+    text-transform: uppercase;
+    letter-spacing: 1px;
+    cursor: pointer;
+    transition: all 0.2s;
+}
+
+.control-button:hover {
+    background: var(--color-text-main);
+    color: black;
+    box-shadow: 0 0 10px rgba(255, 255, 255, 0.5);
+}
+
+/* Cartas de Escolha */
+.choice-card {
+    background-color: rgba(0, 0, 0, 0.9);
+    border: 1px solid var(--color-ui-gray);
+    color: var(--color-text-main);
+    min-height: 150px;
+    transition: transform 0.2s, border-color 0.2s;
+}
+
+.choice-card:hover {
+    transform: translateY(-5px);
+    border-color: var(--color-accent-green);
+    box-shadow: 0 0 15px rgba(0, 255, 65, 0.2);
+}
+
+.card-title {
+    font-family: var(--font-body);
+    font-size: 1em;
+    padding: 15px;
+}
+
+.card-button {
+    width: 100%;
+    padding: 10px;
+    background: transparent;
+    border: none;
+    border-top: 1px solid var(--color-ui-gray);
+    color: var(--color-ui-gray);
+    font-family: var(--font-main);
+    text-transform: uppercase;
+    transition: all 0.2s;
+}
+
+.choice-card:hover .card-button {
+    background: var(--color-accent-green);
+    color: black;
+    border-top-color: var(--color-accent-green);
+}
+
+/* Animação de Scan (Aguardando NFC) */
+.scan-animation {
+    font-family: var(--font-main);
+    color: var(--color-accent-green);
+    animation: blink 1.5s infinite;
+}
+
+@keyframes blink {
+    0% {
+        opacity: 1;
+    }
+
+    50% {
+        opacity: 0.3;
+    }
+
+    100% {
+        opacity: 1;
+    }
+}
+
+/* ===============================================
+   4. TEMAS VISUAIS (Mapeados no constants.js)
+   =============================================== */
+
+/* NEUTRO (Padrão) */
+.ui-agnostic-neutral .game-header {
+    border-bottom-color: var(--color-ui-gray);
+}
+
+.ui-agnostic-neutral .narrative-box {
+    border-color: var(--color-ui-gray);
+}
+
+/* GLITCH (Erro / Perigo) */
+.ui-agnostic-glitch .game-header {
+    border-bottom-color: var(--color-accent-red);
+}
+
+.ui-agnostic-glitch .narrative-box {
+    border-color: var(--color-accent-red);
+}
+
+.ui-agnostic-glitch .narrative-text {
+    color: #ffcccc;
+}
+
+.ui-agnostic-glitch .score-display {
+    color: var(--color-accent-red) !important;
+}
+
+/* GOLD (Vitória / Segredo) */
+.ui-agnostic-gold .game-header {
+    border-bottom-color: var(--color-accent-gold);
+}
+
+.ui-agnostic-gold .narrative-box {
+    border-color: var(--color-accent-gold);
+}
+
+.ui-agnostic-gold .narrative-text {
+    color: #fffacd;
+}
+
+.ui-agnostic-gold .score-display {
+    color: var(--color-accent-gold) !important;
+}
+
+/* ===============================================
+   5. UTILITÁRIOS DE ÁUDIO
+   =============================================== */
+.audio-toggle-button {
+    position: absolute;
+    top: 20px;
+    right: 20px;
+    background: none;
+    border: 1px solid #555;
+    color: #555;
+    font-size: 1.2em;
+    padding: 8px;
+    cursor: pointer;
+    z-index: 1001;
+}
+
+.audio-toggle-button:hover {
+    border-color: #fff;
+    color: #fff;
+}

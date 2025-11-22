@@ -1,0 +1,94 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>PERVASUS: System Interface</title>
+    
+    <link rel="preconnect" href="https://fonts.googleapis.com">
+    <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+    <link href="https://fonts.googleapis.com/css2?family=Courier+Prime&family=Share+Tech+Mono&display=swap" rel="stylesheet">
+    
+    <link href="https://cdn.jsdelivr.net/npm/bootstrap@5.3.3/dist/css/bootstrap.min.css" rel="stylesheet" integrity="sha384-QWTKZyjpPEjISv5WaRU9OFeRpok6YctnYmDr5pNlyT2bRjXh0JMhjY6hW+ALEwIH" crossorigin="anonymous">
+    <link rel="stylesheet" href="css/styles.css">
+
+    <style>
+        /* Enforce Hacker Font */
+        body { font-family: 'Share Tech Mono', monospace; }
+        .game-title { letter-spacing: 5px; text-shadow: 0 0 10px rgba(0, 255, 0, 0.5); }
+    </style>
+</head>
+
+<body>
+    <div id="main-menu" class="main-menu-container active">
+
+        <button id="audio-toggle" class="audio-toggle-button" onclick="toggleAudio()">
+            <span id="audio-status-icon">🔇</span>
+        </button>
+
+        <div class="text-center">
+            <h1 class="game-title display-1">PERVASUS</h1>
+            <p class="lead text-white-50">SYSTEM V1.0 // AGNOSTIC ENGINE</p>
+        </div>
+
+        <div class="menu-options mt-5">
+            <button class="menu-button btn btn-outline-light btn-lg mb-3" onclick="startGame()">
+                [ INITIALIZE SYSTEM ]
+            </button>
+            
+            <button class="menu-button btn btn-outline-secondary btn-sm" onclick="localStorage.clear(); location.reload();">
+                // HARD RESET MEMORY
+            </button>
+        </div>
+        
+        <div class="fixed-bottom p-3 text-center text-muted small">
+            <p>Waiting for external signal...</p>
+        </div>
+    </div>
+
+    <div id="game-play-area" class="container-fluid game-overlay hidden">
+    
+        <div id="background-layer" class="background-container">
+             <img id="scene-background-img" src="assets/img/bg_static.jpg" alt="System View" class="scene-bg active">
+             <video id="scene-background-video" class="scene-bg" loop muted playsinline>
+                <source src="" type="video/mp4">
+            </video>
+        </div>
+        
+        <div class="row justify-content-center h-100 align-items-center"> 
+            <div class="col-12 col-lg-8 col-xl-6">
+
+                <header class="game-header mb-4 p-3 d-flex justify-content-between align-items-center border-bottom border-secondary">
+                    <div class="d-flex align-items-center">
+                        <div class="spinner-grow text-success spinner-grow-sm me-2" role="status"></div>
+                        <h1 class="h6 m-0 text-white font-monospace">LIVE_FEED</h1>
+                    </div>
+                    
+                    <div class="status-info text-end">
+                        <span id="isolation-score" class="score-display font-monospace text-warning">SYSTEM READY</span>
+                    </div>
+                </header>
+
+                <main class="narrative-box p-4 mb-4 border border-dark bg-black bg-opacity-75">
+                    <div id="narrative-output" class="narrative-text text-white">
+                        Awaiting data stream...
+                    </div> 
+                    
+                    <div id="control-container" class="text-center mt-4"></div>
+                </main>
+
+                <section id="card-container" class="choice-cards-section"></section>
+            </div>
+        </div>
+    </div>
+    
+    <script src="https://cdn.jsdelivr.net/npm/bootstrap@5.3.3/dist/js/bootstrap.bundle.min.js" integrity="sha384-YvpcrYf0tY3lHB60NNkmXc5s9fDVZLESaAA55NDzOxhy9GkcIdslK1eN7N6jIeHz" crossorigin="anonymous"></script>
+    
+    <script src="js/constants.js"></script>
+    <script src="js/audio.engine.js"></script> 
+    <script src="js/game.data.js"></script> 
+    <script src="js/game.ui.js"></script>
+    <script src="js/game.core.js"></script> 
+    
+</body>
+</html>
