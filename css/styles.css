@@ -83,6 +83,30 @@ body {
     box-shadow: 0 0 15px rgba(255, 255, 255, 0.5);
 }
 
+/* css/styles.css - Adicionar no final */
+
+.system-footer-text {
+    /* 1. Tamanho e Fonte */
+    font-family: var(--font-main);
+    font-size: 1.2rem;       /* Maior e legível */
+    letter-spacing: 3px;     /* Espaçamento estilo hacker */
+    text-transform: uppercase;
+    
+    /* 2. Cor (Verde Hacker ou o Branco do texto principal) */
+    color: var(--color-accent-green); 
+    
+    /* 3. Garantir contraste */
+    text-shadow: 0 0 10px rgba(0, 255, 65, 0.3);
+    
+    /* 4. Animação */
+    animation: pulse-text 2s infinite ease-in-out;
+}
+
+@keyframes pulse-text {
+    0% { opacity: 0.4; }
+    50% { opacity: 1; }
+    100% { opacity: 0.4; }
+}
 /* Adicionar ao styles.css */
 
 .menu-options {
