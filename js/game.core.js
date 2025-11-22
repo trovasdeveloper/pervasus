@@ -171,20 +171,22 @@ function initEngine()
         return;
     }
 
-    if (scannedTag) {
-        // Se temos tag, o handleInput trata de esconder o menu
+    if (scannedTag) 
+    {
+        // CENÁRIO A: O jogador entrou via NFC (Link da Parede)
+        // Vai direto para o jogo e esconde o menu
         handleInput(INPUT_SOURCE_NFC, scannedTag);
-    } else {
-        // Sem tag: verifica se vai para o HUB ou para o MENU
-        if (StateManager.state.visitedNodes.length > 0) {
-            handleInput(INPUT_SOURCE_SYSTEM, 'node_hub');
-        } else {
-            // Garante estado inicial correto
-            mainMenu.classList.remove('hidden');
-            mainMenu.classList.add('active');
-            gameArea.classList.remove('active');
-            gameArea.classList.add('hidden');
-        }
+    }
+    else
+    {
+        // CENÁRIO B: O jogador abriu o site normal
+        // NOVA LÓGICA: Ignora se já jogou antes. Mostra SEMPRE o Menu Principal.
+        
+        mainMenu.classList.remove('hidden');
+        mainMenu.classList.add('active');
+        
+        gameArea.classList.remove('active');
+        gameArea.classList.add('hidden');
     }
     
     refreshAudioListeners();
