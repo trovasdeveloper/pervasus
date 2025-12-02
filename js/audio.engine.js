@@ -11,7 +11,7 @@ const AudioEngine = (function()
     let menuHoverSound = null;      
     let narrativeHoverSound = null; 
 
-    // --- NOVOS Canais de Áudio ---
+    // --- Canais de Áudio ---
     let currentMusic = null;
     let currentAmbience = null;
     let currentVoiceline = null;
@@ -132,9 +132,8 @@ const AudioEngine = (function()
     function toggleMute() 
     {
         isMuted = !isMuted;
-        updateUI(); // Atualiza o ícone
+        updateUI();
         
-        // Se desmutar, tenta reiniciar as faixas atuais (se houver alguma definida)
         if (!isMuted) 
         {
             if (currentMusic) currentMusic.play().catch(e => console.warn("AudioEngine: Music restart blocked.", e));

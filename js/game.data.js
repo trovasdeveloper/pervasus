@@ -1,90 +1,120 @@
 // ===============================================
-// game.data.js — CONTENT CARTRIDGE: "PERVASUS: PoC"
-// English Version for Demo
+// game.data.js — PUZZLE 01: THE LOST DOG (TUTORIAL)
+// English Version
 // ===============================================
 
 const gameData = {
 
-    // --- 1. SYSTEM NODES (Required by Engine) ---
-
-    // Main Hub
+    // --- 1. GENERAL CONFIGURATION ---
     'node_hub': {
-        background: 'assets/img/bg_hub.jpg',
-        text: "PERVASUS SYSTEM v0.1\n\n[STATUS: ONLINE]\n[CONNECTION: Idle / Listening...]\n\nScan physical memory tags to retrieve data.",
+        background: 'assets/img/bg_static.jpg',
+        text: "PERVASUS SYSTEM ONLINE.\n\nScanning for NFC signals...\n(Scan the physical post-its to interact)",
         inputType: INPUT_TYPE_SCAN_WAIT, 
         visualTheme: THEME_DEFAULT,
         audio: { ambience: 'A_Hub_Hum.mp3' } 
     },
-
-    // 404 Error
-    'node_error_404': {
-        background: 'assets/img/bg_static.jpg',
-        text: "READ ERROR.\nMemory fragment corrupted or missing.",
-        inputType: INPUT_TYPE_CONTINUE,
-        nextSceneId: 'node_hub',
-        visualTheme: THEME_GLITCH,
-        audio: { voiceline: 'V_Glitch.mp3' }
-    },
     
-    // Access Denied
-    'node_access_denied': {
-        background: 'assets/img/bg_lock.jpg',
-        text: "ACCESS DENIED.\nMissing previous cryptographic keys.\n(Hint: Find the Bait/Start tag first)",
+    'node_error_404': {
+        text: "READ ERROR.\nPost-it unreadable or torn.",
         inputType: INPUT_TYPE_CONTINUE,
         nextSceneId: 'node_hub',
-        visualTheme: THEME_LOCKED,
-        audio: { voiceline: 'V_Access_Denied.mp3' }
+        visualTheme: THEME_GLITCH
     },
 
 
-    // --- 2. THE GAME (The 3 Demo Tags) ---
+    // --- 2. THE CHARACTER (THE OWNER) ---
+    // PHYSICAL TAG: .../index.html?tag=tag_owner
+    
+    // STATE A: VICTORY (Only activates if you caught the dog)
+    'tag_owner': {
+        requirements: { requiredFlags: { 'has_dog': true } }, // Requires 'has_dog' flag
+        fallbackNodeId: 'node_owner_quest', // If not, goes to STATE B
 
-    // TAG 1: THE BAIT (Start Point)
-    // URL: .../index.html?tag=tag_start_01
-    'tag_start_01': { 
-        background: 'assets/img/bg_wall_intro.jpg',
-        text: "SYSTEM BOOT SEQUENCE.\n\nThe wall trembles. 'How long has it been since I heard a voice...'\nYou have awakened the GameLab archives.",
+        background: 'assets/img/bg_postit_happy.jpg', 
+        text: "THANK YOU!\n\nYou: 'Here he is.'\nOwner: 'Boby! I was so worried. Please, take this as a reward.'\n\n[MISSION COMPLETE]",
+        inputType: INPUT_TYPE_CONTINUE, // Could link to Puzzle 2 here
+        nextSceneId: 'node_hub',
+        visualTheme: THEME_SUCCESS,
+        audio: { voiceline: 'V_Victory.mp3' }
+    },
+
+    // STATE B: QUEST START (Fallback)
+    'node_owner_quest': {
+        background: 'assets/img/bg_postit_sad.jpg', 
+        text: "HELP WANTED!\n\nOwner: 'I lost my dog... He is a bit clumsy.'\nYou: 'What does he look like?'\nOwner: 'He hates sunglasses. If you see him, please bring him back!'",
         inputType: INPUT_TYPE_CONTINUE,
-        nextSceneId: 'node_hub', 
+        nextSceneId: 'node_hub',
         visualTheme: THEME_DEFAULT,
-        onEnter: { setFlag: 'intro_complete' }, 
-        audio: { 
-            voiceline: 'V_Wall_Intro.mp3',
-            ambience: 'A_System_Boot.mp3'
-        }
+        onEnter: { setFlag: 'quest_started' }, // Activates the quest
+        audio: { voiceline: 'V_Owner_Help.mp3' }
     },
 
-    // TAG 2: MYSTIC ZONE (The Eye)
-    // URL: .../index.html?tag=tag_eye_zone
-    // Requirement: Must have flag 'intro_complete'
-    'tag_eye_zone': {
-        requirements: { requiredFlags: { 'intro_complete': true } }, 
-        
-        background: 'assets/img/bg_eye.jpg',
-        text: "FRAGMENT 042: THE EYE.\n\n'I watched his code being deleted. 300 hours of work gone... Despair has a color.'",
+
+    // --- 3. THE RED HERRINGS (FALSE CLUES) ---
+
+    // TAG: COOL DOG (...?tag=tag_cool_dog)
+    'tag_cool_dog': {
+        background: 'assets/img/bg_postit_cool.jpg', 
+        text: "COOL DOG\n\nYou found a very stylish dog wearing sunglasses.\n\n(Wait... The owner said his dog HATES glasses. This is not Boby.)",
         inputType: INPUT_TYPE_CONTINUE,
         nextSceneId: 'node_hub',
-        visualTheme: THEME_GLITCH, 
-        audio: { 
-            voiceline: 'V_Memory_Eye.mp3',
-            ambience: 'A_Static_Low.mp3'
-        }
+        visualTheme: THEME_DEFAULT,
+        audio: { voiceline: 'V_Dog_Bark_Cool.mp3' }
     },
 
-    // TAG 3: SECRET (Victory)
-    // URL: .../index.html?tag=tag_secret_01
-    // Requirement: Must have visited 'tag_eye_zone'
-    'tag_secret_01': {
-        requirements: { requiredNodes: ['tag_eye_zone'] },
-        
-        background: 'assets/img/bg_gold.jpg',
-        text: "FULL ACCESS GRANTED.\n\nYou found the hidden server inside the wall.\n'We are the memories that the university forgot.'",
-        inputType: INPUT_TYPE_INITIAL_CHOICE, 
+    // TAG: GIRL (...?tag=tag_girl)
+    'tag_girl': {
+        background: 'assets/img/bg_postit_girl.jpg',
+        text: "THIS IS NOT A DOG.\n\nIt is a girl with a backpack.\nShe looks at you strangely and continues walking to school.",
+        inputType: INPUT_TYPE_CONTINUE,
         nextSceneId: 'node_hub',
-        visualTheme: THEME_SUCCESS, 
-        audio: { 
-            voiceline: 'V_Victory.mp3',
-            music: 'M_Mystery_Solved.mp3'
-        }
+        visualTheme: THEME_DEFAULT
+    },
+
+    // TAG: EYE (...?tag=tag_eye)
+    'tag_eye': {
+        background: 'assets/img/bg_postit_eye.jpg',
+        text: "A GIANT EYE.\n\nA drawing of an eye stares at you intensely.\nDefinitely not a dog.",
+        inputType: INPUT_TYPE_CONTINUE,
+        nextSceneId: 'node_hub',
+        visualTheme: THEME_GLITCH 
+    },
+
+
+    // --- 4. THE DOG HUNT (REAL) ---
+
+    // TAG: THE DOG RUNS (...?tag=tag_dog_run)
+    'tag_dog_run': 
+    {
+        background: 'assets/img/bg_postit_dog.jpg',
+        text: "YOU FOUND THE DOG!\n\nIt's him! No glasses and looking clumsy.\nBut as soon as he sees you, he gets scared and runs towards the PARK!\n\n(It looks like he is hiding behind that TREE...)",
+        inputType: INPUT_TYPE_CONTINUE,
+        nextSceneId: 'node_hub',
+        visualTheme: THEME_DEFAULT,
+        onEnter: { setFlag: 'dog_ran_away' }, // Flag to allow catching him at the tree
+        audio: { voiceline: 'V_Dog_Run.mp3' }
+    },
+
+    // TAG: THE TREE / CAPTURE (...?tag=tag_tree)
+    'tag_tree': {
+        requirements: { requiredFlags: { 'dog_ran_away': true } }, // Only works if he ran away
+        fallbackNodeId: 'node_tree_empty',
+
+        background: 'assets/img/bg_postit_tree_dog.jpg',
+        text: "GOTCHA!\n\nThe dog is shivering behind the tree.\nYou pick him up. He licks your face.\n\n[ITEM ADDED: LOST DOG]",
+        inputType: INPUT_TYPE_CONTINUE,
+        nextSceneId: 'node_hub',
+        visualTheme: THEME_SUCCESS,
+        onEnter: { setFlag: 'has_dog' }, // CRITICAL: This flag completes the Owner's quest
+        audio: { voiceline: 'V_Dog_Whine.mp3' }
+    },
+
+    // STATE: EMPTY TREE (If you go there before the dog runs)
+    'node_tree_empty': {
+        background: 'assets/img/bg_postit_tree.jpg',
+        text: "A TREE.\n\nIt is just a tree drawn on a post-it.\nThere is nothing here... for now.",
+        inputType: INPUT_TYPE_CONTINUE,
+        nextSceneId: 'node_hub',
+        visualTheme: THEME_DEFAULT
     }
 };
