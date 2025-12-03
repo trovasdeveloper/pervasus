@@ -1,23 +1,21 @@
-// AGNOSTIC ENGINE CONFIGURATION
-
-// --- CONFIGURAÇÃO DO ENGINE (AGNOSTIC) ---
+// CONFIGURAÇÃO DO ENGINE (AGNOSTIC)
 const ENGINE_NAME           = 'AGNOSTIC ENGINE v1.0';
 const STORAGE_KEY_AGNOSTIC  = 'PERVASUS_DOG_SAVE_01'; 
 const AUDIO_PATH_ROOT       = 'assets/audio/';
 
-// --- CONFIGURAÇÃO DO JOGO ATUAL (PERVASUS) ---
+// --- CONFIGURAÇÃO DO JOGO ATUAL (PERVASUS)
 const GAME_TITLE            = 'PERVASUS';
 
 // Mudámos de 'tag_start_01' para 'node_hub'
 const GAME_START_NODE       = 'node_hub'; 
 
-// --- INPUT SOURCES (Origem do comando) ---
+// INPUT SOURCES
 const INPUT_SOURCE_NFC      = 'input_nfc';
 const INPUT_SOURCE_CLICK    = 'input_click';
 const INPUT_SOURCE_SYSTEM   = 'input_system';
 const INPUT_WRITE_TEXT      = 'input_text';
 
-// --- INPUT TYPES (Tipos de Interface) ---
+// INPUT TYPES (Tipos de Interface) 
 const INPUT_TYPE_SCAN_WAIT      = 'type_scan_wait';      
 const INPUT_TYPE_CONTINUE       = 'type_continue';       
 const INPUT_TYPE_INITIAL_CHOICE = 'type_initial_choice'; 

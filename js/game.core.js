@@ -1,5 +1,4 @@
 // ===============================================
-// game.core.js: AGNOSTIC ENGINE CORE v2.2 (Fix UI Toggle)
 // Architecture: Logic Only (UI Delegated)
 // ===============================================
 
@@ -12,37 +11,47 @@ const StateManager = {
         stats: {}
     },
 
-    init() {
+    init() 
+    {
         const saved = localStorage.getItem(STORAGE_KEY_AGNOSTIC);
-        if (saved) {
-            try {
+        if (saved) 
+        {
+            try 
+            {
                 this.state = JSON.parse(saved);
-                console.log('[AGNOSTIC] Estado carregado:', this.state);
+                console.log('[AGNOSTIC] Loaded State:', this.state);
             } catch (e) {
-                console.warn('[AGNOSTIC] Save corrompido. Reiniciando.');
+                console.warn('[AGNOSTIC] Save failed. Rebooting...');
                 this.save();
             }
-        } else {
-            console.log('[AGNOSTIC] Novo estado iniciado.');
+        } 
+        else 
+        {
+            console.log('[AGNOSTIC] New state initiliazer.');
         }
     },
 
-    save() {
+    save() 
+    {
         localStorage.setItem(STORAGE_KEY_AGNOSTIC, JSON.stringify(this.state));
     },
 
-    registerNode(nodeId) {
-        if (!this.state.visitedNodes.includes(nodeId)) {
+    registerNode(nodeId) 
+    {
+        if (!this.state.visitedNodes.includes(nodeId)) 
+        {
             this.state.visitedNodes.push(nodeId);
             this.save();
+
             return true; 
         }
+
         return false; 
     },
 
-    hasVisited(nodeId) { return this.state.visitedNodes.includes(nodeId); },
-    setFlag(key, val) { this.state.flags[key] = val; this.save(); },
-    getFlag(key) { return !!this.state.flags[key]; }
+    hasVisited(nodeId)  { return this.state.visitedNodes.includes(nodeId); },
+    setFlag(key, val)   { this.state.flags[key] = val; this.save(); },
+    getFlag(key)        { return !!this.state.flags[key]; }
 };
 
 // --- 2. LOGIC EVALUATOR ---
@@ -67,7 +76,7 @@ function checkRequirements(requirements) {
 // --- 3. CORE FLOW VARIABLES ---
 let currentSceneId = 'node_hub'; 
 
-// --- 4. INPUT ROUTER (AQUI ESTAVA O ERRO VISUAL) ---
+// --- 4. INPUT ROUTER
 function handleInput(source, data) {
     console.log(`[Input] Fonte: ${source} | Payload: ${data}`);
 
@@ -76,11 +85,11 @@ function handleInput(source, data) {
 
     // 1. FORÇA O MENU A DESAPARECER
     mainMenu.classList.remove('active');
-    mainMenu.classList.add('hidden'); // Adiciona hidden para garantir display:none
+    mainMenu.classList.add('hidden'); 
 
     // 2. FORÇA O JOGO A APARECER
     gameArea.classList.remove('hidden'); // CRÍTICO: Remove o display:none
-    gameArea.classList.add('active');    // Ativa a opacidade
+    gameArea.classList.add('active');    
 
     // ROTA 1: NFC / URL Externa
     if (source === INPUT_SOURCE_NFC) {
@@ -104,21 +113,27 @@ function handleInput(source, data) {
         }
     } 
     // ROTA 2: Navegação Interna
-    else if (source === INPUT_SOURCE_CLICK || source === INPUT_SOURCE_SYSTEM) {
+    else if (source === INPUT_SOURCE_CLICK || source === INPUT_SOURCE_SYSTEM) 
+    {
         loadScene(data);
     }
 }
 
-function loadScene(sceneId) {
+function loadScene(sceneId) 
+{
     currentSceneId = sceneId;
     
-    if (typeof renderScene === "function") {
+    if (typeof renderScene === "function") 
+    {
         renderScene(sceneId);
-    } else {
+    } 
+    else
+    {
         console.error("CRITICAL ERROR: renderScene not found.");
     }
     
-    if (typeof applyVisualTheme === "function") {
+    if (typeof applyVisualTheme === "function") 
+    {
         applyVisualTheme();
     }
 }
@@ -138,7 +153,8 @@ function makeChoice(scoreChange, nextSceneId) {
     handleInput(INPUT_SOURCE_CLICK, nextSceneId);
 }
 
-function exitGame() {
+function exitGame() 
+{
     const mainMenu = document.getElementById('main-menu');
     const gameArea = document.getElementById('game-play-area');
 
