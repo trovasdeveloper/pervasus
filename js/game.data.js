@@ -32,7 +32,7 @@ const gameData =
 
         background: 'assets/img/bg_postit_happy.jpg', 
         text: "THANK YOU!\n\nYou: 'Here he is.'\nOwner: 'Boby! I was so worried. Please, take this as a reward.'\n\n[MISSION COMPLETE]",
-        inputType: INPUT_TYPE_CONTINUE,
+        //inputType: INPUT_TYPE_CONTINUE,
         nextSceneId: 'node_hub',
         visualTheme: THEME_SUCCESS,
         audio: { voiceline: 'V_Victory.mp3' }
@@ -43,7 +43,7 @@ const gameData =
     {
         background: 'assets/img/bg_postit_sad.jpg', 
         text: "HELP WANTED!\n\nOwner: 'I lost my dog... He is a bit clumsy.'\nYou: 'What does he look like?'\nOwner: 'He hates sunglasses. If you see him, please bring him back!'",
-        inputType: INPUT_TYPE_CONTINUE,
+        //inputType: INPUT_TYPE_CONTINUE,
         nextSceneId: 'node_hub',
         visualTheme: THEME_DEFAULT,
         onEnter: { setFlag: 'quest_started' }, // Activates the quest
@@ -57,7 +57,7 @@ const gameData =
     {
         background: 'assets/img/bg_postit_cool.jpg', 
         text: "COOL DOG\n\nYou found a very stylish dog wearing sunglasses.\n\n(Wait... The owner said his dog HATES glasses. This is not Boby.)",
-        inputType: INPUT_TYPE_CONTINUE,
+        //inputType: INPUT_TYPE_CONTINUE,
         nextSceneId: 'node_hub',
         visualTheme: THEME_DEFAULT,
         audio: { voiceline: 'V_Dog_Bark_Cool.mp3' }
@@ -90,7 +90,7 @@ const gameData =
     {
         background: 'assets/img/bg_postit_dog.jpg',
         text: "YOU FOUND THE DOG!\n\nIt's him! No glasses and looking clumsy.\nBut as soon as he sees you, he gets scared and runs towards the PARK!\n\n(It looks like he is hiding behind that TREE...)",
-        inputType: INPUT_TYPE_CONTINUE,
+        //inputType: INPUT_TYPE_CONTINUE,
         nextSceneId: 'node_hub',
         visualTheme: THEME_DEFAULT,
         onEnter: { setFlag: 'dog_ran_away' }, // Flag to allow catching him at the tree
@@ -105,7 +105,7 @@ const gameData =
 
         background: 'assets/img/bg_postit_tree_dog.jpg',
         text: "GOTCHA!\n\nThe dog is shivering behind the tree.\nYou pick him up. He licks your face.\n\n[ITEM ADDED: LOST DOG]",
-        inputType: INPUT_TYPE_CONTINUE,
+        //inputType: INPUT_TYPE_CONTINUE,
         nextSceneId: 'node_hub',
         visualTheme: THEME_SUCCESS,
         onEnter: { setFlag: 'has_dog' }, // CRITICAL: This flag completes the Owner's quest
@@ -117,7 +117,7 @@ const gameData =
     {
         background: 'assets/img/bg_postit_tree.jpg',
         text: "A TREE.\n\nIt is just a tree drawn on a post-it.\nThere is nothing here... for now.",
-        inputType: INPUT_TYPE_CONTINUE,
+        //inputType: INPUT_TYPE_CONTINUE,
         nextSceneId: 'node_hub',
         visualTheme: THEME_DEFAULT
     }
