@@ -41,20 +41,33 @@ const gameData =
     // STATE B: (Fallback)
     'node_owner_quest': 
     {
+         requirements: { requiredFlags: { 'has_quest': false } },
+
         background: 'assets/img/bg_postit_sad.jpg', 
         text: "HELP WANTED!\n\nOwner: 'I lost my dog... He is a bit clumsy.'\nYou: 'What does he look like?'\nOwner: 'He hates sunglasses. If you see him, please bring him back!'",
-        //inputType: INPUT_TYPE_CONTINUE,
-        nextSceneId: 'node_hub',
+        inputType: INPUT_TYPE_CONTINUE,
+        nextSceneId: 'node_owner_quest_accepted',
         visualTheme: THEME_DEFAULT,
-        onEnter: { setFlag: 'quest_started' }, // Activates the quest
+        onEnter: { setFlag: '' }, // Activates the quest
         audio: { voiceline: 'V_Owner_Help.mp3' }
     },
 
-
+    'node_owner_quest_accepted': 
+    {
+        background: 'assets/img/bg_postit_sad.jpg', 
+        text: "Thank You!",
+        //inputType: INPUT_TYPE_CONTINUE,
+        //nextSceneId: 'node_hub',
+        visualTheme: THEME_DEFAULT,
+        onEnter: { setFlag: 'dog_quest_started', setFlag: 'has_quest' }, // Activates the quest
+        audio: { voiceline: 'V_Owner_Help.mp3' }
+    },
+    
     //  3. FALSE CLUE
     // TAG: COOL DOG (...?tag=tag_cool_dog)
     'tag_cool_dog': 
     {
+        requirements: { requiredFlags: { 'dog_quest_started': true } },
         background: 'assets/img/bg_postit_cool.jpg', 
         text: "COOL DOG\n\nYou found a very stylish dog wearing sunglasses.\n\n(Wait... The owner said his dog HATES glasses. This is not Boby.)",
         //inputType: INPUT_TYPE_CONTINUE,
@@ -66,6 +79,7 @@ const gameData =
     // TAG: GIRL (...?tag=tag_girl)
     'tag_girl': 
     {
+        requirements: { requiredFlags: { 'dog_quest_started': true } },
         background: 'assets/img/bg_postit_girl.jpg',
         text: "THIS IS NOT A DOG.\n\nIt is a girl with a backpack.\nShe looks at you strangely and continues walking to school.",
         inputType: INPUT_TYPE_CONTINUE,
@@ -76,6 +90,7 @@ const gameData =
     // TAG: EYE (...?tag=tag_eye)
     'tag_eye': 
     {
+        requirements: { requiredFlags: { 'dog_quest_started': true } },
         background: 'assets/img/bg_postit_eye.jpg',
         text: "A GIANT EYE.\n\nA drawing of an eye stares at you intensely.\nDefinitely not a dog.",
         inputType: INPUT_TYPE_CONTINUE,
@@ -88,6 +103,7 @@ const gameData =
     // TAG: THE DOG RUNS (...?tag=tag_dog_run)
     'tag_dog_run': 
     {
+        requirements: { requiredFlags: { 'dog_quest_started': true } },
         background: 'assets/img/bg_postit_dog.jpg',
         text: "YOU FOUND THE DOG!\n\nIt's him! No glasses and looking clumsy.\nBut as soon as he sees you, he gets scared and runs towards the PARK!\n\n(It looks like he is hiding behind that TREE...)",
         //inputType: INPUT_TYPE_CONTINUE,
@@ -100,7 +116,17 @@ const gameData =
     // TAG: THE TREE / CAPTURE (...?tag=tag_tree)
     'tag_tree': 
     {
-        requirements: { requiredFlags: { 'dog_ran_away': true } }, // Only works if he ran away
+        requirements: 
+        { 
+            requiredFlags: 
+            { 
+                'dog_ran_away': true,
+                'dog_quest_started': true
+            },
+
+        },
+         
+ // Only works if he ran away
         fallbackNodeId: 'node_tree_empty',
 
         background: 'assets/img/bg_postit_tree_dog.jpg',
@@ -115,6 +141,7 @@ const gameData =
     // STATE: EMPTY TREE (Se o player for à arvore antes)
     'node_tree_empty': 
     {
+        requirements: { requiredFlags: { 'dog_quest_started': true } },
         background: 'assets/img/bg_postit_tree.jpg',
         text: "A TREE.\n\nIt is just a tree drawn on a post-it.\nThere is nothing here... for now.",
         //inputType: INPUT_TYPE_CONTINUE,
