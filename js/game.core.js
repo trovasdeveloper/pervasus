@@ -99,8 +99,17 @@ function handleInput(source, data) {
             if (checkRequirements(nodeData.requirements)) {
                 StateManager.registerNode(data);
                 
-                if (nodeData.onEnter && nodeData.onEnter.setFlag) {
-                    StateManager.setFlag(nodeData.onEnter.setFlag, true);
+                if (nodeData.onEnter) {
+                    // Backwards compatible: single flag
+                    if (nodeData.onEnter.setFlag) {
+                        StateManager.setFlag(nodeData.onEnter.setFlag, true);
+                    }
+                    // New: multiple flags
+                    if (nodeData.onEnter.setFlags) {
+                        for (const [key, val] of Object.entries(nodeData.onEnter.setFlags)) {
+                            StateManager.setFlag(key, !!val);
+                        }
+                    }
                 }
 
                 loadScene(data);
