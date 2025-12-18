@@ -344,9 +344,9 @@ const gameData = {
   // --- PUZZLE 3: THE INTERROGATION ---
   // --- THE JOKER (HUB) ---
   tag_stoner_joker: {
-    requirements: { requiredFlags: { stoner_joker_quest_finished: true } },
-    fallbackNodeId: "node_stoner_joker_in_progress_check",
-
+    // 1. HIGHEST PRIORITY: If his own quest is done, he stays chilling no matter what.
+    requirements: { requiredFlags: { stoner_joker_quest_complete: true } },
+    fallbackNodeId: "node_joker_quest_interception", // Check if boyfriend quest is active and divert to it if so
     background: "assets/img/stoner_joker_postit.png",
     text: "JOKER: Thanks again for finding out it was Gabs, man. I'm just chilling.",
     inputType: INPUT_TYPE_SCAN_WAIT,
@@ -355,22 +355,23 @@ const gameData = {
 
   // --- CHECK IF QUEST IS ACTIVE ---
   node_stoner_joker_in_progress_check: {
-    requirements: { requiredFlags: { stoner_joker_quest_started: true } },
+    requirements: { requiredFlags: { stoner_joker_quest_active: true } },
     fallbackNodeId: "node_stoner_joker_initial_offer",
-
     background: "assets/img/stoner_joker_postit.png",
     text: "JOKER: Found the honest dude yet? Remember, tell me his name when you're sure.",
     inputType: INPUT_TYPE_INITIAL_CHOICE,
     options: [
       {
         text: "IDENTIFY THE HONEST DUDE",
-        nextSceneId: "node_stoner_joker_final",
+        nextSceneId: "node_stoner_joker_guess_name",
       },
     ],
   },
 
   // --- THE INITIAL OFFER ---
   node_stoner_joker_initial_offer: {
+    requirements: { requiredFlags: { has_quest: false } },
+    fallbackNodeId: "node_joker_busy_player", // Node for when player already has a quest
     background: "assets/img/stoner_joker_postit.png",
     text: "Hey man, can you help me out?\n\nOne of four dudes yoinked my whole blunt. I'm too fucked up to remember much, but apparently three of them can’t tell the truth.\n\nFind out which one’s honest and I’ll go ask him myself.",
     inputType: INPUT_TYPE_INITIAL_CHOICE,
@@ -382,10 +383,16 @@ const gameData = {
     ],
   },
 
+  node_joker_busy_player: {
+    background: "assets/img/stoner_joker_postit.png",
+    text: "JOKER: Whoa man, you look like you've already got a lot on your plate. Come back when you've finished your other stuff.",
+    inputType: INPUT_TYPE_SCAN_WAIT,
+  },
+
   node_stoner_joker_quest_accepted: {
     onEnter: {
       setFlags: {
-        stoner_joker_quest_started: true,
+        stoner_joker_quest_active: true,
         has_quest: true,
       },
     },
@@ -397,7 +404,7 @@ const gameData = {
   // --- THE SUSPECTS ---
   tag_ricky: {
     requirements: {
-      requiredFlags: { stoner_joker_quest_started: true },
+      requiredFlags: { stoner_joker_quest_active: true },
     },
     fallbackNodeId: "node_nothing_here",
     text: "RICKY:\n'Hey man, I don’t know what you’re on about, but you shouldn’t trust Gabs.'",
@@ -407,7 +414,7 @@ const gameData = {
 
   tag_gui: {
     requirements: {
-      requiredFlags: { stoner_joker_quest_started: true },
+      requiredFlags: { stoner_joker_quest_active: true },
     },
     fallbackNodeId: "node_nothing_here",
     text: "GUI:\n'Tutu and Gabs are always lying and messing with people, it gets kinda tiring after a while.'",
@@ -417,7 +424,7 @@ const gameData = {
 
   tag_tutu: {
     requirements: {
-      requiredFlags: { stoner_joker_quest_started: true },
+      requiredFlags: { stoner_joker_quest_active: true },
     },
     fallbackNodeId: "node_nothing_here",
     text: "TUTU:\n'Gui is the most trustworthy guy I know. You should listen to him.'",
@@ -427,7 +434,7 @@ const gameData = {
 
   tag_gabs: {
     requirements: {
-      requiredFlags: { stoner_joker_quest_started: true },
+      requiredFlags: { stoner_joker_quest_active: true },
     },
     fallbackNodeId: "node_nothing_here",
     text: "GABS:\n'I’m the only one out of these idiots that’s not a dirty lying cheat.'",
@@ -441,8 +448,8 @@ const gameData = {
     visualTheme: THEME_DEFAULT,
   },
 
-  // --- THE FINALE ---
-  node_stoner_joker_final: {
+  // --- THE NAME GUESSING SCENE ---
+  node_stoner_joker_guess_name: {
     background: "assets/img/stoner_joker_postit.png",
     text: "JOKER:\n'So which one MUST be the honest dude?'\n\n(Careful man, if you're wrong I'm gonna need a 30 min nap.)",
     inputType: "type_text_input",
@@ -450,7 +457,7 @@ const gameData = {
     nextSceneId: "stoner_joker_quest_complete",
   },
 
-  // --- THE FAILURE SCENE ---
+  // --- THE WRONG GUESS SCENE ---
   node_stoner_joker_wrong: {
     background: "assets/img/stoner_joker_postit.png",
     text: "JOKER: Nah man, that ain't it. Now my head hurts. I'm gonna go pass out for a bit.\n\n(He falls face-first into the grass. System indicates he will be unavailable for 30 minutes.)",
@@ -459,7 +466,7 @@ const gameData = {
     visualTheme: THEME_LOCKED,
   },
 
-  // --- THE WIN SCENE ---
+  // --- THE QUEST COMPLETE SCENE ---
   stoner_joker_quest_complete: {
     background: "assets/img/stoner_joker_postit.png",
     text:
@@ -471,10 +478,170 @@ const gameData = {
     visualTheme: THEME_SUCCESS,
     onEnter: {
       setFlags: {
-        stoner_joker_quest_finished: true,
-        stoner_joker_quest_started: false,
+        stoner_joker_quest_complete: true,
+        stoner_joker_quest_active: false,
         has_quest: false,
       },
     },
+  },
+
+  // --- PUZZLE 04: THE BOYFRIEND QUEST ---
+
+  tag_lonely_girl: {
+    // Check if fully finished first
+    requirements: { requiredFlags: { bf_quest_complete: true } },
+    fallbackNodeId: "node_girl_check_depressed",
+    background: "assets/img/lonely_girl_postit.png",
+    text: "GIRL: You know what?\n\nI think I just realized I just kinda hate all men.... Thanks! I'll be fine by myself.\n\n[QUEST COMPLETE]",
+    inputType: INPUT_TYPE_SCAN_WAIT,
+    visualTheme: THEME_SUCCESS,
+  },
+
+  node_girl_check_depressed: {
+    // If we just found the depressed guy, FINISH the quest
+    requirements: { requiredFlags: { bf_quest_found_depressed: true } },
+    fallbackNodeId: "node_girl_check_raiden",
+    background: "assets/img/lonely_girl_postit.png",
+    // Complete quest logic here
+    onEnter: {
+      setFlags: {
+        bf_quest_complete: true,
+        bf_quest_active: false,
+        has_quest: false,
+      },
+    },
+    text: "GIRL: Finally! Someone who gets it... wait...",
+    inputType: INPUT_TYPE_CONTINUE,
+    nextSceneId: "tag_lonely_girl",
+  },
+
+  node_girl_check_raiden: {
+    requirements: { requiredFlags: { bf_quest_found_raiden: true } },
+    fallbackNodeId: "node_girl_check_mexican",
+    background: "assets/img/lonely_girl_postit.png",
+    text: "GIRL: It doesn't look like he even knows what day it is.\n\nI want someone I can relate to, find me a guy as depressed as I am.",
+    onEnter: { setFlags: { bf_quest_validated_raiden: true } },
+    inputType: INPUT_TYPE_SCAN_WAIT,
+  },
+
+  node_girl_check_mexican: {
+    requirements: { requiredFlags: { bf_quest_found_mexican: true } },
+    fallbackNodeId: "node_girl_check_joker",
+    background: "assets/img/lonely_girl_postit.png",
+    text: "GIRL: Hmm, this feels kinda weird actually\n\nFind me a silver fox instead.",
+    onEnter: { setFlags: { bf_quest_validated_mexican: true } },
+    inputType: INPUT_TYPE_SCAN_WAIT,
+  },
+
+  node_girl_check_joker: {
+    requirements: { requiredFlags: { bf_quest_found_joker: true } },
+    fallbackNodeId: "node_girl_check_batman",
+    background: "assets/img/lonely_girl_postit.png",
+    text: "GIRL: Getting high isn't a personality trait.\n\nFind me a good ol' Mexican dude.",
+    onEnter: { setFlags: { bf_quest_validated_joker: true } },
+    inputType: INPUT_TYPE_SCAN_WAIT,
+  },
+
+  node_girl_check_batman: {
+    requirements: { requiredFlags: { bf_quest_found_batman: true } },
+    fallbackNodeId: "node_girl_initial",
+    background: "assets/img/lonely_girl_postit.png",
+    text: "GIRL: Ugh, superheroes are so self-absorbed.\n\nFind me someone who can roast me.",
+    onEnter: { setFlags: { bf_quest_validated_batman: true } },
+    inputType: INPUT_TYPE_SCAN_WAIT,
+  },
+
+  // Only show the "Accept" button if:
+  // 1. The BF quest hasn't started yet.
+  // 2. The player is not currently on any other quest.
+  node_girl_initial: {
+    requirements: {
+      requiredFlags: {
+        bf_quest_active: false,
+        has_quest: false,
+      },
+    },
+    fallbackNodeId: "node_girl_already_on_quest_check",
+    background: "assets/img/lonely_girl_postit.png",
+    text: "GIRL: I’m so lonely, help me find someone to keep me company.\n\nI like heroic men, find me a superhero.",
+    inputType: INPUT_TYPE_INITIAL_CHOICE,
+    options: [
+      { text: "I'LL HELP YOU FIND LOVE", nextSceneId: "node_girl_accepted" },
+    ],
+  },
+
+  node_girl_already_on_quest_check: {
+    // If we are already on the BF quest, show a 'Waiting for Batman' message.
+    requirements: { requiredFlags: { bf_quest_active: true } },
+    fallbackNodeId: "node_girl_busy_with_other",
+    background: "assets/img/lonely_girl_postit.png",
+    text: "GIRL: Still looking for that superhero? I hope he's not just a guy in a suit.",
+    inputType: INPUT_TYPE_SCAN_WAIT,
+  },
+
+  node_girl_busy_with_other: {
+    background: "assets/img/lonely_girl_postit.png",
+    text: "GIRL: You look like you're already busy helping someone else.\n\nCome back when you've finished your current business!",
+    inputType: INPUT_TYPE_SCAN_WAIT,
+  },
+
+  node_girl_accepted: {
+    // Start the boyfriend quest here if player pressed the button
+    onEnter: {
+      setFlags: {
+        bf_quest_active: true,
+        has_quest: true,
+      },
+    },
+    background: "assets/img/lonely_girl_postit.png",
+    text: "GIRL: Really? Thank you! I hear there's a superhero hanging around nearby.",
+    inputType: INPUT_TYPE_SCAN_WAIT,
+  },
+
+  // --- THE BOYFRIEND CANDIDATES --- Can make a generic node for these while not on the quest if needed
+  tag_batman: {
+    requirements: { requiredFlags: { bf_quest_active: true } },
+    background: "assets/img/batman_postit.png",
+    text: "You found the superest of heroes.",
+    onEnter: { setFlags: { bf_quest_found_batman: true } },
+    inputType: INPUT_TYPE_SCAN_WAIT,
+  },
+
+  node_joker_quest_interception: {
+    requirements: {
+      requiredFlags: {
+        bf_quest_validated_batman: true,
+        bf_quest_found_joker: false,
+      },
+    },
+    fallbackNodeId: "node_stoner_joker_in_progress_check",
+    background: "assets/img/stoner_joker_postit.png",
+    text: "JOKER: Hey bro, you want a puff?\n\nHe seems roasted out of his mind...",
+    onEnter: { setFlags: { bf_quest_found_joker: true } },
+    inputType: INPUT_TYPE_SCAN_WAIT,
+  },
+
+  tag_mexican_guy: {
+    requirements: { requiredFlags: { bf_quest_validated_joker: true } },
+    background: "assets/img/mexican_guy_postit.png",
+    text: "You find a stereotypical mexican.",
+    onEnter: { setFlags: { bf_quest_found_mexican: true } },
+    inputType: INPUT_TYPE_SCAN_WAIT,
+  },
+
+  tag_raiden: {
+    requirements: { requiredFlags: { bf_quest_validated_mexican: true } },
+    background: "assets/img/raiden_postit.png",
+    text: "You find an old Raiden with dementia.",
+    onEnter: { setFlags: { bf_quest_found_raiden: true } },
+    inputType: INPUT_TYPE_SCAN_WAIT,
+  },
+
+  tag_depressed_guy: {
+    requirements: { requiredFlags: { bf_quest_validated_raiden: true } },
+    background: "assets/img/depressed_guy_postit.png",
+    text: "You find a guy laughing through the pain.",
+    onEnter: { setFlags: { bf_quest_found_depressed: true } },
+    inputType: INPUT_TYPE_SCAN_WAIT,
   },
 };
